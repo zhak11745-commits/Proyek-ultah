@@ -10,7 +10,6 @@
         body {
             margin: 0;
             padding: 0;
-            /* Menggunakan 100vh agar memenuhi tinggi layar HP */
             height: 100vh; 
             display: flex;
             justify-content: center;
@@ -25,7 +24,6 @@
             text-align: center;
             position: relative;
             z-index: 10;
-            /* Menggunakan 95% lebar agar aman di semua ukuran HP */
             width: 95%; 
         }
 
@@ -40,14 +38,12 @@
         }
 
         .gift-box {
-            /* Ukuran emoji kado dikecilkan sedikit agar proporsional di HP */
             font-size: 80px; 
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
         }
 
         .click-me {
             margin-top: 15px;
-            /* Ukuran font disesuaikan */
             font-size: 1.3rem; 
             color: #db2777;
             font-weight: bold;
@@ -63,7 +59,6 @@
         }
 
         .surprise-img {
-            /* Menggunakan max-width berdasarkan viewport (layar) */
             max-width: 60vw; 
             width: 80%;
             border-radius: 20px;
@@ -73,11 +68,9 @@
             margin-bottom: 15px;
         }
 
-        /* Teks Utama */
         h1 {
             font-family: 'Fredoka One', cursive;
             color: #ff6b81;
-            /* Ukuran font disesuaikan untuk HP */
             font-size: 2.5rem; 
             margin: 0;
             text-shadow: 3px 3px 0px #ffeaa7;
@@ -85,10 +78,8 @@
             letter-spacing: 1px;
         }
 
-        /* Teks Bawah (Pesan Panjang) */
         p {
             color: #88c425; 
-            /* Ukuran font disesuaikan untuk HP */
             font-size: 1.3rem; 
             margin-top: 10px;
             font-weight: bold;
@@ -96,7 +87,6 @@
             max-width: 90%; 
         }
 
-        /* Tombol Ulang */
         .btn-reload {
             margin-top: 20px;
             padding: 8px 20px;
@@ -106,7 +96,6 @@
             border-radius: 50px;
             cursor: pointer;
             font-family: 'Fredoka One', cursive;
-            /* Ukuran font tombol disesuaikan */
             font-size: 0.9rem; 
             box-shadow: 0 4px 0 #e0566b;
             transition: all 0.1s;
@@ -117,10 +106,10 @@
             transform: translateY(2px);
         }
 
-        /* --- SPRINKLE/KONFETI --- */
+        /* --- SPRINKLE/KONFETI BARU --- */
+        /* Class dasar konfeti */
         .confetti {
             position: absolute;
-            /* Ukuran konfeti sedikit diperkecil */
             width: 8px;
             height: 8px;
             top: -10vh;
@@ -128,21 +117,18 @@
             opacity: 0.9;
         }
 
-        /* Variasi bentuk konfeti juga disesuaikan ukurannya */
+        /* Variasi bentuk konfeti */
         .confetti.circle {
             border-radius: 50%;
             width: 6px;
             height: 6px;
         }
-        .confetti.triangle {
-            width: 0;
-            height: 0;
-            border-left: 4px solid transparent;
-            border-right: 4px solid transparent;
-        }
-        .confetti.square {
-            width: 8px;
-            height: 8px;
+
+        /* DEFINISI ANIMASI JATUH */
+        @keyframes fall {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+            50% { transform: translateY(50vh) rotate(360deg); }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
     </style>
 </head>
@@ -174,26 +160,25 @@
             giftBox.style.display = 'none';
             surprise.style.display = 'flex';
             
-            // Jumlah konfeti tetap banyak untuk efek meriah
-            startConfetti(250); 
+            // PENTING: Meningkatkan jumlah konfeti menjadi 350
+            startConfetti(350); 
         }
 
         function startConfetti(count) {
             for (let i = 0; i < count; i++) {
-                createConfetti();
+                // Menunda sedikit pembuatan konfeti agar tidak membebani browser di waktu yang sama
+                setTimeout(createConfetti, i * 3); 
             }
         }
 
         function createConfetti() {
             const confetti = document.createElement('div');
             
-            // Variasi bentuk konfeti (0: square, 1: circle, 2: triangle)
-            const shapeType = Math.floor(Math.random() * 3); 
+            // Variasi bentuk (0: square, 1: circle)
+            const shapeType = Math.floor(Math.random() * 2); 
             
             if (shapeType === 1) {
                 confetti.classList.add('circle');
-            } else if (shapeType === 2) {
-                confetti.classList.add('triangle');
             } else {
                 confetti.classList.add('square');
             }
@@ -204,34 +189,21 @@
             const colors = ['#ff6b81', '#ff4757', '#7bed9f', '#2ed573', '#eccc68', '#70a1ff', '#ffafc8', '#ffa500'];
             const randomColor = colors[Math.floor(Math.random() * colors.length)];
             
-            if (shapeType === 2) {
-                // Untuk segitiga, warna diatur di border, bukan background
-                confetti.style.borderBottom = `10px solid ${randomColor}`;
-            } else {
-                confetti.style.backgroundColor = randomColor;
-            }
+            // Mengatur warna untuk kedua bentuk
+            confetti.style.backgroundColor = randomColor;
             
-            // Posisi dan animasi acak
+            // Posisi dan kecepatan jatuh acak
             confetti.style.left = Math.random() * 100 + 'vw';
             
             const duration = Math.random() * 3 + 2; 
-            confetti.style.animation = `fall ${duration}s linear infinite`;
+            confetti.style.animation = `fall ${duration}s linear`; // Hapus 'infinite' agar jatuh sekali
             
             document.body.appendChild(confetti);
 
-            // Menyuntikkan keyframes (sama seperti sebelumnya, untuk menjaga animasi)
-            const styleSheet = document.styleSheets[0];
-            const keyframes = `
-                @keyframes fall {
-                    0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-                    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
-                }
-            `;
-            try { 
-                if (!styleSheet.cssRules || styleSheet.cssRules.length === 0 || !styleSheet.cssRules[styleSheet.cssRules.length - 1].cssText.includes('fall')) {
-                    styleSheet.insertRule(keyframes, styleSheet.cssRules.length); 
-                }
-            } catch(e){}
+            // Hapus elemen setelah jatuh agar tidak membebani memori
+            setTimeout(() => {
+                confetti.remove();
+            }, (duration + 0.5) * 1000); 
         }
     </script>
 </body>
