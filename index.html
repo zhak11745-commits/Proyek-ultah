@@ -10,11 +10,12 @@
         body {
             margin: 0;
             padding: 0;
-            height: 100vh;
+            /* Menggunakan 100vh agar memenuhi tinggi layar HP */
+            height: 100vh; 
             display: flex;
             justify-content: center;
             align-items: center;
-            background-color: #fdf2f8; /* Latar pink sangat muda */
+            background-color: #fdf2f8; 
             font-family: 'Patrick Hand', cursive;
             overflow: hidden;
             flex-direction: column;
@@ -24,7 +25,8 @@
             text-align: center;
             position: relative;
             z-index: 10;
-            width: 90%; 
+            /* Menggunakan 95% lebar agar aman di semua ukuran HP */
+            width: 95%; 
         }
 
         /* 1. KOTAK KADO */
@@ -38,13 +40,15 @@
         }
 
         .gift-box {
-            font-size: 100px;
+            /* Ukuran emoji kado dikecilkan sedikit agar proporsional di HP */
+            font-size: 80px; 
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.1));
         }
 
         .click-me {
-            margin-top: 20px;
-            font-size: 1.5rem;
+            margin-top: 15px;
+            /* Ukuran font disesuaikan */
+            font-size: 1.3rem; 
             color: #db2777;
             font-weight: bold;
             animation: pulse 1.5s infinite;
@@ -59,7 +63,8 @@
         }
 
         .surprise-img {
-            max-width: 280px; 
+            /* Menggunakan max-width berdasarkan viewport (layar) */
+            max-width: 60vw; 
             width: 80%;
             border-radius: 20px;
             box-shadow: 0 10px 25px rgba(0,0,0,0.1);
@@ -72,7 +77,8 @@
         h1 {
             font-family: 'Fredoka One', cursive;
             color: #ff6b81;
-            font-size: 3rem; 
+            /* Ukuran font disesuaikan untuk HP */
+            font-size: 2.5rem; 
             margin: 0;
             text-shadow: 3px 3px 0px #ffeaa7;
             line-height: 1.1;
@@ -81,62 +87,62 @@
 
         /* Teks Bawah (Pesan Panjang) */
         p {
-            color: #88c425; /* Hijau kodok */
-            font-size: 1.5rem; 
+            color: #88c425; 
+            /* Ukuran font disesuaikan untuk HP */
+            font-size: 1.3rem; 
             margin-top: 10px;
             font-weight: bold;
             line-height: 1.3;
-            max-width: 400px; 
+            max-width: 90%; 
         }
 
         /* Tombol Ulang */
         .btn-reload {
-            margin-top: 25px;
-            padding: 10px 25px;
+            margin-top: 20px;
+            padding: 8px 20px;
             border: none;
             background: #ff6b81;
             color: white;
             border-radius: 50px;
             cursor: pointer;
             font-family: 'Fredoka One', cursive;
-            font-size: 1rem;
-            box-shadow: 0 5px 0 #e0566b;
+            /* Ukuran font tombol disesuaikan */
+            font-size: 0.9rem; 
+            box-shadow: 0 4px 0 #e0566b;
             transition: all 0.1s;
         }
 
         .btn-reload:active {
             box-shadow: 0 2px 0 #e0566b;
-            transform: translateY(3px);
+            transform: translateY(2px);
         }
 
-        /* --- ANIMASI --- */
-        @keyframes shake {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(5deg); }
-            50% { transform: rotate(0deg); }
-            75% { transform: rotate(-5deg); }
-            100% { transform: rotate(0deg); }
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        @keyframes popUp {
-            0% { transform: scale(0); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        /* Konfeti */
+        /* --- SPRINKLE/KONFETI --- */
         .confetti {
             position: absolute;
-            width: 10px;
-            height: 10px;
-            background-color: #f00;
+            /* Ukuran konfeti sedikit diperkecil */
+            width: 8px;
+            height: 8px;
             top: -10vh;
             z-index: 5;
+            opacity: 0.9;
+        }
+
+        /* Variasi bentuk konfeti juga disesuaikan ukurannya */
+        .confetti.circle {
+            border-radius: 50%;
+            width: 6px;
+            height: 6px;
+        }
+        .confetti.triangle {
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+        }
+        .confetti.square {
+            width: 8px;
+            height: 8px;
         }
     </style>
 </head>
@@ -168,23 +174,44 @@
             giftBox.style.display = 'none';
             surprise.style.display = 'flex';
             
-            startConfetti();
+            // Jumlah konfeti tetap banyak untuk efek meriah
+            startConfetti(250); 
         }
 
-        function startConfetti() {
-            for (let i = 0; i < 120; i++) {
+        function startConfetti(count) {
+            for (let i = 0; i < count; i++) {
                 createConfetti();
             }
         }
 
         function createConfetti() {
             const confetti = document.createElement('div');
+            
+            // Variasi bentuk konfeti (0: square, 1: circle, 2: triangle)
+            const shapeType = Math.floor(Math.random() * 3); 
+            
+            if (shapeType === 1) {
+                confetti.classList.add('circle');
+            } else if (shapeType === 2) {
+                confetti.classList.add('triangle');
+            } else {
+                confetti.classList.add('square');
+            }
+            
             confetti.classList.add('confetti');
+
+            // Warna-warni pastel yang cerah
+            const colors = ['#ff6b81', '#ff4757', '#7bed9f', '#2ed573', '#eccc68', '#70a1ff', '#ffafc8', '#ffa500'];
+            const randomColor = colors[Math.floor(Math.random() * colors.length)];
             
-            // Warna-warni pastel
-            const colors = ['#ff6b81', '#ff4757', '#7bed9f', '#2ed573', '#eccc68', '#70a1ff'];
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            if (shapeType === 2) {
+                // Untuk segitiga, warna diatur di border, bukan background
+                confetti.style.borderBottom = `10px solid ${randomColor}`;
+            } else {
+                confetti.style.backgroundColor = randomColor;
+            }
             
+            // Posisi dan animasi acak
             confetti.style.left = Math.random() * 100 + 'vw';
             
             const duration = Math.random() * 3 + 2; 
@@ -192,6 +219,7 @@
             
             document.body.appendChild(confetti);
 
+            // Menyuntikkan keyframes (sama seperti sebelumnya, untuk menjaga animasi)
             const styleSheet = document.styleSheets[0];
             const keyframes = `
                 @keyframes fall {
@@ -199,7 +227,11 @@
                     100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
                 }
             `;
-            try { styleSheet.insertRule(keyframes, styleSheet.cssRules.length); } catch(e){}
+            try { 
+                if (!styleSheet.cssRules || styleSheet.cssRules.length === 0 || !styleSheet.cssRules[styleSheet.cssRules.length - 1].cssText.includes('fall')) {
+                    styleSheet.insertRule(keyframes, styleSheet.cssRules.length); 
+                }
+            } catch(e){}
         }
     </script>
 </body>
